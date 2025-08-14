@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة كلية رؤية المستقبل – درنة</title>
+  <style>
+    body { font-family: Tahoma, system-ui; margin:0; }
+    header { padding:16px; border-bottom:1px solid #eee; display:flex; gap:12px; align-items:center; }
+    .logo { width:44px; height:44px; background:#ddd; border-radius:8px; }
+    nav a { margin:0 8px; text-decoration:none; color:#333; }
+    .hero { padding:56px 20px; background:#f6f8ff; text-align:center; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:16px; padding:20px; }
+    .card { border:1px solid #eee; border-radius:12px; padding:16px; background:#fff; }
+    footer { padding:24px; text-align:center; color:#666; border-top:1px solid #eee; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo"></div>
+  <div style="flex:1"><strong>كلية رؤية المستقبل – درنة</strong></div>
+  <nav>
+    <a href="#news">الأخبار</a>
+    <a href="#events">الفعاليات</a>
+    <a href="#contact">تواصل</a>
+    <a href="../student/index.html">دخول الطالب</a>
+    <a href="../admin/index.html">لوحة الإدارة</a>
+  </nav>
+</header>
+<section class="hero">
+  <h1>نظام واحد… يلغي الورق ويختصر الوقت</h1>
+  <p>نتائج، جداول، رسوم، تقارير – لحظيًا وبأمان.</p>
+</section>
+<section class="grid" id="news">
+  <div class="card"><h3>آخر الإعلانات</h3><ul id="ann"></ul></div>
+  <div class="card"><h3>الفعاليات</h3><ul id="ev"></ul></div>
+  <div class="card"><h3>تحقق من كشف</h3>
+    <input id="studentNo" placeholder="رقم الطالب">
+    <input id="semCode" placeholder="كود الفصل (مثال: 2025-W1)">
+    <button onclick="verify()">تحقق</button>
+    <pre id="out"></pre>
+  </div>
+</section>
+<footer>© 2025 كلية رؤية المستقبل – درنة</footer>
+<script>
+const API = 'http://localhost:4000/api/public';
+async function load() {
+  try {
+    const a = await fetch(API + '/announcements').then(r=>r.json());
+    const e = await fetch(API + '/events').then(r=>r.json());
+    document.getElementById('ann').innerHTML = a.map(x=>`<li>${x.title}</li>`).join('') || '<li>لا يوجد</li>';
+    document.getElementById('ev').innerHTML = e.map(x=>`<li>${x.title}</li>`).join('') || '<li>لا يوجد</li>';
+  } catch {}
+}
+async function verify() {
+  const no = document.getElementById('studentNo').value;
+  const sem = document.getElementById('semCode').value;
+  const r = await fetch(`${API}/verify/${no}/${sem}`);
+  document.getElementById('out').textContent = await r.text();
+}
+load();
+</script>
+</body></html>

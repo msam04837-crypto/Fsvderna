@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>بوابة الطالب</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Tahoma; margin:0; }
+    header { padding:14px; border-bottom:1px solid #eee; display:flex; gap:10px; align-items:center; }
+    .wrap { max-width:900px; margin: auto; padding: 16px; }
+    .card { border:1px solid #eee; border-radius:10px; padding:12px; margin:10px 0; }
+  </style>
+</head>
+<body>
+<header>
+  <strong>بوابة الطالب</strong>
+  <a style="margin-right:auto" href="../portal/index.html">العودة للبوابة</a>
+</header>
+<div class="wrap">
+  <div class="card">
+    <h3>عرض نتائجي</h3>
+    <label>Student ID <input id="sid"></label>
+    <label>Semester ID <input id="sem"></label>
+    <button onclick="load()">عرض</button>
+    <pre id="out"></pre>
+  </div>
+  <div class="card">
+    <h3>الفواتير والسداد</h3>
+    <label>Student ID <input id="sid2"></label>
+    <label>Semester ID <input id="sem2"></label>
+    <button onclick="fees()">عرض</button>
+    <pre id="out2"></pre>
+  </div>
+</div>
+<script>
+const API = 'http://localhost:4000/api';
+async function load(){
+  const sid = document.getElementById('sid').value;
+  const sem = document.getElementById('sem').value;
+  const r = await fetch(`${API}/students/${sid}/transcript/${sem}`);
+  document.getElementById('out').textContent = await r.text();
+}
+async function fees(){
+  const sid = document.getElementById('sid2').value;
+  const sem = document.getElementById('sem2').value;
+  const r = await fetch(`${API}/students/${sid}/fees/${sem}`);
+  document.getElementById('out2').textContent = await r.text();
+}
+</script>
+</body></html>

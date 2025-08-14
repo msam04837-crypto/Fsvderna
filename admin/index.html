@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة الإدارة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Tahoma; margin:0; display:grid; grid-template-columns: 220px 1fr; min-height:100vh; }
+    aside { background:#0f172a; color:#fff; padding:16px; }
+    main { padding:18px; }
+    a { color:inherit; text-decoration:none; display:block; padding:8px; border-radius:8px; }
+    a:hover { background:#1f2937; }
+    .box { border:1px solid #eee; border-radius:10px; padding:12px; background:#fff; margin-bottom:12px; }
+    label { display:block; margin:4px 0; }
+    input, select { width:100%; padding:8px; margin-bottom:6px; }
+    button { padding:8px 12px; }
+    .kpis { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
+    .kpi { background:#fff; border:1px solid #eee; border-radius:10px; padding:12px; text-align:center; }
+  </style>
+</head>
+<body>
+<aside>
+  <h3>إدارة الكلية</h3>
+  <nav>
+    <a href="#dashboard">لوحة الإحصاءات</a>
+    <a href="#students">الطلاب</a>
+    <a href="#courses">المقررات والشُعب</a>
+    <a href="#fees">الرسوم والسداد</a>
+    <a href="#reports">التقارير والطباعة</a>
+  </nav>
+</aside>
+<main>
+  <h2>لوحة تحكم (v1)</h2>
+
+  <section id="dashboard" class="box">
+    <h3>إحصاءات سريعة</h3>
+    <div class="kpis">
+      <div class="kpi"><div>عدد الطلاب</div><strong id="k_students">–</strong></div>
+      <div class="kpi"><div>عدد المقررات</div><strong id="k_courses">–</strong></div>
+      <div class="kpi"><div>الشُعب النشطة</div><strong id="k_sections">–</strong></div>
+      <div class="kpi"><div>فواتير غير مسددة</div><strong id="k_invoices">–</strong></div>
+    </div>
+  </section>
+
+  <section id="students" class="box">
+    <h3>الطلاب</h3>
+    <button onclick="loadStudents()">تحديث القائمة</button>
+    <pre id="out_students"></pre>
+  </section>
+
+  <section id="courses" class="box">
+    <h3>المقررات والشعب</h3>
+    <button onclick="loadCourses()">تحديث</button>
+    <pre id="out_courses"></pre>
+  </section>
+
+  <section id="fees" class="box">
+    <h3>تسجيل سداد</h3>
+    <label>ID الفاتورة <input id="inv_id"/></label>
+    <label>المبلغ <input id="amt"/></label>
+    <label>الطريقة <input id="method" placeholder="نقدي/تحويل/بطاقة"/></label>
+    <button onclick="pay()">سداد</button>
+    <pre id="out_pay"></pre>
+  </section>
+
+  <section id="reports" class="box">
+    <h3>التقارير والطباعة</h3>
+    <a href="../templates/transcript.html" target="_blank">طباعة كشف فردي (نموذج)</a><br/>
+    <a href="../templates/transcripts_bulk.html" target="_blank">طباعة كشوف جماعية</a><br/>
+    <a href="../templates/receipt.html" target="_blank">طباعة إيصال سداد</a>
+  </section>
+</main>
+
+<script>
+const API_PRIV = 'http://localhost:4000/api';
+let token = '';
+
+async function loginAdmin() {
+  const r = await fetch(API_PRIV + '/auth/login', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username:'admin', password:'Admin@123'})});
+  const data = await r.json();
+  token = data.token || '';
+}
+
+async function loadStudents() {
+  if(!token) await loginAdmin();
+  const r = await fetch(API_PRIV + '/students', { headers:{ Authorization: 'Bearer ' + token } });
+  document.getElementById('out_students').textContent = await r.text();
+}
+
+async function loadCourses() {
+  if(!token) await loginAdmin();
+  const r1 = await fetch(API_PRIV + '/courses', { headers:{ Authorization: 'Bearer ' + token } });
+  const r2 = await fetch(API_PRIV + '/courses/sections', { headers:{ Authorization: 'Bearer ' + token } });
+  const t1 = await r1.text(); const t2 = await r2.text();
+  document.getElementById('out_courses').textContent = t1 + '\n---\n' + t2;
+}
+
+async function pay() {
+  if(!token) await loginAdmin();
+  const body = { invoice_id: document.getElementById('inv_id').value, method: document.getElementById('method').value || 'نقدي', amount: Number(document.getElementById('amt').value||0) };
+  const r = await fetch(API_PRIV + '/fees/payment', { method:'POST', headers:{ 'Content-Type':'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify(body)});
+  document.getElementById('out_pay').textContent = await r.text();
+}
+
+(async function kpis(){
+  try { if(!token) await loginAdmin();
+    const students = await fetch(API_PRIV + '/students', { headers:{ Authorization: 'Bearer ' + token } }).then(r=>r.json());
+    const courses = await fetch(API_PRIV + '/courses', { headers:{ Authorization: 'Bearer ' + token } }).then(r=>r.json());
+    const sections = await fetch(API_PRIV + '/courses/sections', { headers:{ Authorization: 'Bearer ' + token } }).then(r=>r.json());
+    // فواتير غير مسددة (تقريبي: ليس endpoint مخصص)
+    document.getElementById('k_students').textContent = students.length;
+    document.getElementById('k_courses').textContent = courses.length;
+    document.getElementById('k_sections').textContent = sections.length;
+    document.getElementById('k_invoices').textContent = '—';
+  } catch (e) {}
+})();
+</script>
+</body></html>
