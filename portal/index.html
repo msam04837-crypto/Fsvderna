@@ -3,61 +3,914 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بوابة كلية رؤية المستقبل – درنة</title>
+  <title>مكتب التعليم التقني والفني – درنة</title>
+  <meta name="description" content="الموقع الرسمي لمكتب التعليم التقني والفني بمدينة درنة – ليبيا. أخبار، فعاليات، برامج تدريبية وخدمات إلكترونية للطلاب والمعلمين.">
   <style>
-    body { font-family: Tahoma, system-ui; margin:0; }
-    header { padding:16px; border-bottom:1px solid #eee; display:flex; gap:12px; align-items:center; }
-    .logo { width:44px; height:44px; background:#ddd; border-radius:8px; }
-    nav a { margin:0 8px; text-decoration:none; color:#333; }
-    .hero { padding:56px 20px; background:#f6f8ff; text-align:center; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:16px; padding:20px; }
-    .card { border:1px solid #eee; border-radius:12px; padding:16px; background:#fff; }
-    footer { padding:24px; text-align:center; color:#666; border-top:1px solid #eee; }
+    :root {
+      color-scheme: light;
+      --primary: #0057b7;
+      --primary-dark: #023f82;
+      --accent: #ffc745;
+      --bg: #f5f7fb;
+      --text: #1f2933;
+      --muted: #6b7a90;
+      font-size: 16px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Tajawal", "Segoe UI", Tahoma, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .container {
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+    }
+
+    .brand-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 1.2rem;
+      box-shadow: 0 10px 20px rgba(0,87,183,0.18);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-weight: 500;
+    }
+
+    nav a {
+      position: relative;
+      padding: 6px 2px;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      bottom: 0;
+      height: 2px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform .25s ease;
+    }
+
+    nav a:hover::after,
+    nav a:focus-visible::after {
+      transform: scaleX(1);
+    }
+
+    .nav-toggle {
+      display: none;
+      border: none;
+      background: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--primary-dark);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: clamp(72px, 18vw, 132px) clamp(18px, 10vw, 72px);
+      background: radial-gradient(circle at top right, rgba(0,87,183,0.15), transparent 60%),
+                  radial-gradient(circle at bottom left, rgba(255,199,69,0.18), transparent 55%),
+                  linear-gradient(135deg, #f6f9ff, #eef4ff);
+      margin: 24px auto 48px;
+    }
+
+    .hero-content {
+      max-width: 580px;
+    }
+
+    .hero h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2.1rem, 4vw, 3.2rem);
+      color: var(--primary-dark);
+      line-height: 1.3;
+    }
+
+    .hero p {
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(0, 87, 183, 0.22);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--primary-dark);
+      border: 1px solid rgba(2, 63, 130, 0.16);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(2, 63, 130, 0.18);
+    }
+
+    .quick-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin: 0 auto 64px;
+    }
+
+    .quick-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 18px 34px rgba(15, 23, 42, 0.08);
+      display: grid;
+      gap: 12px;
+      min-height: 180px;
+    }
+
+    .quick-card span {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    section {
+      margin: 72px 0;
+    }
+
+    section header {
+      position: relative;
+      background: none;
+      border: none;
+      padding: 0 0 24px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      color: var(--primary-dark);
+      margin: 0 0 12px;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      max-width: 620px;
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+      display: grid;
+      gap: 12px;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: var(--primary-dark);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .card ul li {
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+    }
+
+    .card ul li:last-child {
+      border-bottom: none;
+    }
+
+    .program-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .program-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,87,183,0.08), rgba(255,199,69,0.12));
+      pointer-events: none;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 18px;
+      margin-top: 32px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.92);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .timeline {
+      border-inline-start: 3px solid rgba(0,87,183,0.15);
+      padding-inline-start: 24px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .timeline-item {
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      inset-inline-start: -34px;
+      top: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 3px rgba(0,87,183,0.12);
+    }
+
+    .news-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .news-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px 22px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+      border-inline-start: 4px solid var(--primary);
+    }
+
+    .news-card time {
+      font-size: .9rem;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .news-card h4 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+      color: var(--primary-dark);
+    }
+
+    .cta-banner {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      border-radius: 24px;
+      padding: 42px clamp(18px, 8vw, 48px);
+      display: grid;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .cta-banner h2 {
+      margin: 0;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+    }
+
+    .contact-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      align-items: start;
+    }
+
+    .contact-card {
+      display: grid;
+      gap: 16px;
+      padding: 26px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 16px 28px rgba(15, 23, 42, 0.08);
+    }
+
+    .contact-card strong {
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+    }
+
+    .contact-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+    }
+
+    .contact-list li span {
+      display: block;
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .contact-form input,
+    .contact-form textarea,
+    .contact-form select {
+      border-radius: 12px;
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      padding: 12px 14px;
+      font: inherit;
+      background: #fff;
+      resize: vertical;
+    }
+
+    .contact-form textarea {
+      min-height: 120px;
+    }
+
+    footer {
+      margin-top: 72px;
+      padding: 32px 0 18px;
+      background: #0a1b2e;
+      color: rgba(255,255,255,0.72);
+    }
+
+    footer .footer-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      margin-bottom: 28px;
+    }
+
+    footer h4 {
+      margin: 0 0 12px;
+      color: #fff;
+    }
+
+    footer ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    footer a {
+      color: inherit;
+    }
+
+    footer .copyright {
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 16px;
+      font-size: .9rem;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        position: fixed;
+        inset-inline: 0;
+        top: 72px;
+        background: rgba(255,255,255,0.98);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 0;
+        transform: translateY(-130%);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform .35s ease, opacity .35s ease;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      }
+
+      nav.open {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      nav a {
+        padding: 16px 24px;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+      }
+
+      .nav-toggle {
+        display: inline-flex;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .hero {
+        text-align: center;
+      }
+
+      .hero-actions {
+        justify-content: center;
+      }
+
+      .quick-card {
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
-<header>
-  <div class="logo"></div>
-  <div style="flex:1"><strong>كلية رؤية المستقبل – درنة</strong></div>
-  <nav>
-    <a href="#news">الأخبار</a>
-    <a href="#events">الفعاليات</a>
-    <a href="#contact">تواصل</a>
-    <a href="../student/index.html">دخول الطالب</a>
-    <a href="../admin/index.html">لوحة الإدارة</a>
-  </nav>
-</header>
-<section class="hero">
-  <h1>نظام واحد… يلغي الورق ويختصر الوقت</h1>
-  <p>نتائج، جداول، رسوم، تقارير – لحظيًا وبأمان.</p>
-</section>
-<section class="grid" id="news">
-  <div class="card"><h3>آخر الإعلانات</h3><ul id="ann"></ul></div>
-  <div class="card"><h3>الفعاليات</h3><ul id="ev"></ul></div>
-  <div class="card"><h3>تحقق من كشف</h3>
-    <input id="studentNo" placeholder="رقم الطالب">
-    <input id="semCode" placeholder="كود الفصل (مثال: 2025-W1)">
-    <button onclick="verify()">تحقق</button>
-    <pre id="out"></pre>
-  </div>
-</section>
-<footer>© 2025 كلية رؤية المستقبل – درنة</footer>
-<script>
-const API = 'http://localhost:4000/api/public';
-async function load() {
-  try {
-    const a = await fetch(API + '/announcements').then(r=>r.json());
-    const e = await fetch(API + '/events').then(r=>r.json());
-    document.getElementById('ann').innerHTML = a.map(x=>`<li>${x.title}</li>`).join('') || '<li>لا يوجد</li>';
-    document.getElementById('ev').innerHTML = e.map(x=>`<li>${x.title}</li>`).join('') || '<li>لا يوجد</li>';
-  } catch {}
-}
-async function verify() {
-  const no = document.getElementById('studentNo').value;
-  const sem = document.getElementById('semCode').value;
-  const r = await fetch(`${API}/verify/${no}/${sem}`);
-  document.getElementById('out').textContent = await r.text();
-}
-load();
-</script>
-</body></html>
+  <header>
+    <div class="container top-bar">
+      <div class="brand">
+        <div class="brand-badge">تق</div>
+        <div>
+          <div>مكتب التعليم التقني والفني</div>
+          <small style="color:var(--muted); font-weight:500;">بلدية درنة – ليبيا</small>
+        </div>
+      </div>
+      <button class="nav-toggle" aria-label="القائمة" onclick="toggleMenu()">☰</button>
+      <nav id="mainNav">
+        <a href="#about">التعريف</a>
+        <a href="#programs">المعاهد والبرامج</a>
+        <a href="#services">الخدمات الإلكترونية</a>
+        <a href="#news">الأخبار</a>
+        <a href="#events">الفعاليات</a>
+        <a href="#contact">تواصل</a>
+        <a href="../student/index.html">دخول الطلبة</a>
+        <a href="../admin/index.html">الدخول الإداري</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" id="top">
+      <div class="hero-content">
+        <span style="display:inline-block;padding:6px 14px;border-radius:999px;background:rgba(0,87,183,0.12);color:var(--primary-dark);font-weight:600;">تعليم تقني يواكب المستقبل</span>
+        <h1>نهضة تقنية ومهنية تخدم أبناء درنة وتدعم اقتصاد ليبيا</h1>
+        <p>يعمل مكتب التعليم التقني والفني – درنة على تنظيم وتطوير مؤسسات التعليم التقني والمعاهد المهنية، ويدعم البرامج التدريبية الحديثة، ويقدم خدمات إلكترونية متكاملة للطلبة والكوادر.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#services">ابدأ من الخدمات الإلكترونية</a>
+          <a class="btn btn-secondary" href="#contact">التواصل والاستفسارات</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-info" aria-label="إحصائيات سريعة">
+      <article class="quick-card">
+        <span data-count="14">0</span>
+        <strong>معهد ومركز تابع</strong>
+        <p>معاهد تقنية ومراكز تدريب معتمدة موزعة على نطاق البلدية.</p>
+      </article>
+      <article class="quick-card">
+        <span data-count="4200">0</span>
+        <strong>طالب وطالبة</strong>
+        <p>مقيدون في برامج الدبلوم المتوسط، والدورات المهنية المتخصصة.</p>
+      </article>
+      <article class="quick-card">
+        <span data-count="320">0</span>
+        <strong>عضو هيئة تدريس</strong>
+        <p>كوادر تدريسية وفنية مؤهلة تدعم جودة العملية التعليمية.</p>
+      </article>
+      <article class="quick-card">
+        <span data-count="65">0</span>
+        <strong>شراكة ومبادرة</strong>
+        <p>مشاريع تعاون مع القطاعين العام والخاص لدعم التوظيف وريادة الأعمال.</p>
+      </article>
+    </section>
+
+    <section id="about">
+      <header>
+        <h2 class="section-title">من نحن</h2>
+        <p class="section-subtitle">يمثل مكتب التعليم التقني والفني – درنة الجهة المسؤولة عن التخطيط والإشراف على المعاهد التقنية والمهنية، وتطوير البرامج التي تلبي احتياجات سوق العمل المحلي والوطني.</p>
+      </header>
+      <div class="grid grid-3">
+        <article class="card">
+          <h3>رؤيتنا</h3>
+          <p>تعليم تقني متجدد يصنع فرصاً للابتكار والاعتماد الذاتي، ويعزز الاقتصاد المحلي بخريجين جاهزين لسوق العمل.</p>
+        </article>
+        <article class="card">
+          <h3>رسالتنا</h3>
+          <p>تمكين الشباب من امتلاك المهارات التقنية والمهنية، عبر برامج مرنة، ومناهج حديثة، وشراكات بناءة مع مؤسسات التدريب والعمل.</p>
+        </article>
+        <article class="card">
+          <h3>أهدافنا</h3>
+          <ul>
+            <li>رفع جودة التدريب والتقويم في المعاهد والمراكز.</li>
+            <li>التوسع في الخدمات الرقمية للطلبة والموظفين.</li>
+            <li>تحفيز ريادة الأعمال والمشاريع الناشئة التقنية.</li>
+            <li>تأهيل الكوادر الفنية وفق المعايير الوطنية.</li>
+          </ul>
+        </article>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <strong data-count="96">0</strong>
+          <span>نسبة رضا المستفيدين عن الخدمات</span>
+        </div>
+        <div class="stat">
+          <strong data-count="28">0</strong>
+          <span>برنامجاً محدثاً خلال العام الدراسي 2024/2025</span>
+        </div>
+        <div class="stat">
+          <strong data-count="18">0</strong>
+          <span>معملاً جديداً تم تجهيزه خلال آخر عامين</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="programs">
+      <header>
+        <h2 class="section-title">المعاهد والبرامج المتاحة</h2>
+        <p class="section-subtitle">مجموعة متكاملة من البرامج التقنية والدورات المهنية التي تم تصميمها لتلبية احتياجات سوق العمل في الشرق الليبي.</p>
+      </header>
+      <div class="grid grid-3">
+        <article class="card program-card">
+          <h3>معهد الدراسات الهندسية</h3>
+          <p>برامج الدبلوم في الهندسة المدنية، الكهربائية، والميكانيكية مع تدريب عملي في مواقع المشاريع.</p>
+          <ul>
+            <li>مدة البرنامج: 3 سنوات</li>
+            <li>شهادات اعتماد وطنية</li>
+            <li>مختبرات محاكاة حديثة</li>
+          </ul>
+        </article>
+        <article class="card program-card">
+          <h3>معهد تكنولوجيا المعلومات</h3>
+          <p>منهجيات حديثة في تطوير البرمجيات، الشبكات، الأمن السيبراني، والذكاء الاصطناعي.</p>
+          <ul>
+            <li>مشاريع تخرج تطبيقية</li>
+            <li>مسارات مهنية معتمدة دولياً</li>
+            <li>شراكات مع شركات تقنية ناشئة</li>
+          </ul>
+        </article>
+        <article class="card program-card">
+          <h3>المركز المهني الصناعي</h3>
+          <p>دورات قصيرة ومتوسطة في التبريد والتكييف، اللحام، الطاقة المتجددة، وصيانة المعدات الثقيلة.</p>
+          <ul>
+            <li>ورش مجهزة بالكامل</li>
+            <li>تدريب ميداني مع شركات صناعية</li>
+            <li>اعتماد مهني معتمد</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="services">
+      <header>
+        <h2 class="section-title">الخدمات الإلكترونية</h2>
+        <p class="section-subtitle">منظومة رقمية تساعد الطالب، عضو هيئة التدريس، والمؤسسات الشريكة على إنجاز المعاملات بأسرع وقت وبموثوقية عالية.</p>
+      </header>
+      <div class="grid grid-3">
+        <article class="card">
+          <h3>بوابة الطالب</h3>
+          <p>نتائج الامتحانات، التسجيل الفصلي، استخراج إفادات الدراسة، ومعاملات السداد الإلكتروني.</p>
+          <a class="btn btn-secondary" href="../student/index.html">الدخول إلى البوابة</a>
+        </article>
+        <article class="card">
+          <h3>نظام الموارد البشرية</h3>
+          <p>متابعة شؤون العاملين، خطط التدريب، الترقيات، وإدارة الجداول الزمنية للمحاضرين.</p>
+          <button class="btn btn-secondary" type="button" onclick="alert('هذه نسخة استعراضية – تواصل معنا لتفعيل الحساب.');">طلب حساب</button>
+        </article>
+        <article class="card">
+          <h3>منصة الشراكات</h3>
+          <p>عرض فرص التدريب التعاوني، طلبات التوظيف، والمبادرات المشتركة مع القطاع الخاص والمؤسسات الدولية.</p>
+          <a class="btn btn-secondary" href="#contact">سجل اهتمامك</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="news">
+      <header>
+        <h2 class="section-title">آخر الأخبار</h2>
+        <p class="section-subtitle">مستجدات العملية التعليمية، قرارات المكتب، والقصص الملهمة من قاعات التدريب.</p>
+      </header>
+      <div class="news-list" id="newsList"></div>
+    </section>
+
+    <section id="events">
+      <header>
+        <h2 class="section-title">الفعاليات والأنشطة</h2>
+        <p class="section-subtitle">ندوات، معارض، مسابقات تقنية، وزيارات ميدانية لتعزيز التجربة العملية.</p>
+      </header>
+      <div class="timeline" id="timeline"></div>
+    </section>
+
+    <section id="training">
+      <header>
+        <h2 class="section-title">برامج تطوير الكفاءات</h2>
+        <p class="section-subtitle">سلسلة من البرامج الموجهة للطلبة والخريجين والمعلمين، مصممة لبناء قدرات مستقبلية في التقنية والابتكار.</p>
+      </header>
+      <div class="grid grid-3">
+        <article class="card">
+          <h3>أكاديمية الريادة التقنية</h3>
+          <p>برنامج مكثف لتأسيس المشاريع الناشئة في مجالات التقنية المالية، الذكاء الاصطناعي، وإنترنت الأشياء.</p>
+          <ul>
+            <li>4 أشهر من التدريب والإرشاد</li>
+            <li>وصول إلى مسرّعة أعمال درنة</li>
+            <li>منح للمشاريع المتميزة</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>تمهير المعلمين</h3>
+          <p>ورش تدريبية لمهارات التعليم الإلكتروني، تصميم المناهج، وأساليب التقييم الحديث.</p>
+          <ul>
+            <li>محاضرات افتراضية وتطبيقية</li>
+            <li>اعتماد من مركز ضمان الجودة</li>
+            <li>استشارات فردية أثناء التطبيق</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>مختبر المهارات الرقمية</h3>
+          <p>دورات متدرجة في الأمن السيبراني، تحليل البيانات، وإدارة نظم المعلومات للقطاعات الحكومية.</p>
+          <ul>
+            <li>مختبرات مجهزة بسيرفرات افتراضية</li>
+            <li>امتحانات مهنية معتمدة</li>
+            <li>فرص تدريب مدفوعة</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="cta-banner">
+        <h2>بوابتنا الرقمية توفر لك خدمات فورية وآمنة</h2>
+        <p>من خلال حسابك يمكنك طلب الإفادات، متابعة الأداء، تسجيل الدورات، وإدارة بياناتك الأكاديمية دون الحاجة لزيارة المقر.</p>
+        <div>
+          <a class="btn btn-secondary" style="background:#fff;color:var(--primary-dark);" href="../student/index.html">تسجيل الدخول للطلبة</a>
+          <a class="btn btn-secondary" style="margin-inline-start:12px;background:rgba(255,255,255,0.16);color:#fff;border:1px solid rgba(255,255,255,0.4);" href="../admin/index.html">وحدة المتابعة الإدارية</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <header>
+        <h2 class="section-title">تواصل معنا</h2>
+        <p class="section-subtitle">يسعد فريق مكتب التعليم التقني والفني – درنة استقبال استفساراتكم واقتراحاتكم، وتوفير الدعم لكافة المستفيدين.</p>
+      </header>
+      <div class="contact-grid">
+        <article class="contact-card">
+          <strong>بيانات الاتصال</strong>
+          <ul class="contact-list">
+            <li><span>الهاتف:</span> ‎+218 91 456 7890 / ‎+218 81 333 2210</li>
+            <li><span>البريد الإلكتروني:</span> info@tveta-derna.ly</li>
+            <li><span>المقر الرئيسي:</span> شارع الكورنيش، بجوار معهد الدراسات الهندسية – درنة</li>
+            <li><span>ساعات العمل:</span> الأحد – الخميس، 8:30 صباحاً حتى 3:00 مساءً</li>
+          </ul>
+        </article>
+        <article class="contact-card">
+          <strong>نموذج المراسلة السريعة</strong>
+          <form class="contact-form" onsubmit="event.preventDefault(); alert('تم استلام رسالتك. سنقوم بالرد خلال يومي عمل.');">
+            <input type="text" name="name" placeholder="الاسم الكامل" required>
+            <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+            <select name="topic" required>
+              <option value="" disabled selected>اختر موضوع الرسالة</option>
+              <option>خدمات الطلبة</option>
+              <option>التسجيل والقبول</option>
+              <option>شؤون العاملين</option>
+              <option>شراكات وتعاون</option>
+            </select>
+            <textarea name="message" placeholder="نص الرسالة" required></textarea>
+            <button class="btn btn-primary" type="submit">إرسال الرسالة</button>
+          </form>
+        </article>
+        <article class="contact-card">
+          <strong>موقعنا على الخريطة</strong>
+          <p>يمكن الوصول إلينا بسهولة بالقرب من المعهد العالي للهندسة، مع مواقف خاصة للزوار والجهات الشريكة.</p>
+          <div style="border-radius:16px; overflow:hidden; min-height:200px; background:#d8e3f8; display:grid; place-items:center; color:var(--primary-dark); font-weight:600;">
+            خريطة تفاعلية ستتوفر قريباً
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>عن المكتب</h4>
+          <p>نقود التنمية البشرية في مدينة درنة من خلال تعليم تقني ومهني عالي الجودة، وبيئة تدريبية تدعم الابتكار والاستدامة.</p>
+        </div>
+        <div>
+          <h4>روابط مهمة</h4>
+          <ul>
+            <li><a href="#about">عن المكتب</a></li>
+            <li><a href="#services">الخدمات الرقمية</a></li>
+            <li><a href="#training">برامج التطوير</a></li>
+            <li><a href="#contact">مركز الدعم</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>وثائق وإصدارات</h4>
+          <ul>
+            <li><a href="#">الخطة الاستراتيجية 2025</a></li>
+            <li><a href="#">دليل الطالب والمعلم</a></li>
+            <li><a href="#">تقرير الأداء السنوي</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>تابعنا</h4>
+          <ul>
+            <li><a href="#">فيسبوك: tveta.derna</a></li>
+            <li><a href="#">لينكدإن: TVETA Derna</a></li>
+            <li><a href="#">قناة التليغرام</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">© 2025 مكتب التعليم التقني والفني – درنة. جميع الحقوق محفوظة.</div>
+    </div>
+  </footer>
+
+  <script>
+    const newsData = [
+      {
+        title: "إطلاق منصة التسجيل الموحد للمعاهد التقنية",
+        date: "15 فبراير 2025",
+        excerpt: "تتيح المنصة الجديدة للطلبة اختيار البرامج وتأكيد التسجيل إلكترونياً مع متابعة فورية لحالة الطلب."
+      },
+      {
+        title: "افتتاح مركز الابتكار الصناعي",
+        date: "2 يناير 2025",
+        excerpt: "المركز يوفر مختبرات متقدمة للطاقة المتجددة والطباعة ثلاثية الأبعاد لخدمة المشاريع الطلابية والشركات الناشئة."
+      },
+      {
+        title: "توقيع مذكرة تعاون مع شركة لخدمات النفط",
+        date: "18 ديسمبر 2024",
+        excerpt: "الاتفاقية تضمن فرص تدريب وتوظيف لخريجي التخصصات الميكانيكية والكهربائية في حقول الهلال النفطي."
+      }
+    ];
+
+    const eventsTimeline = [
+      {
+        title: "منتدى التقنية والوظائف",
+        date: "مارس 2025",
+        details: "لقاءات بين الطلبة والشركات ورواد الأعمال، مع جلسات إرشاد مهنية."
+      },
+      {
+        title: "مسابقة الابتكار الصناعي",
+        date: "أبريل 2025",
+        details: "فرق طلابية تتنافس لتطوير حلول ذكية في مجالات الطاقة والصيانة الذكية."
+      },
+      {
+        title: "أسبوع التدريب الميداني",
+        date: "يونيو 2025",
+        details: "زيارات موجهة للمصانع والمنشآت الحيوية، وتوقيع عقود تدريب تعاوني."
+      }
+    ];
+
+    const formatter = new Intl.NumberFormat('ar-LY');
+
+    function renderNews() {
+      const list = document.getElementById('newsList');
+      list.innerHTML = newsData.map(item => `
+        <article class="news-card">
+          <time>${item.date}</time>
+          <h4>${item.title}</h4>
+          <p>${item.excerpt}</p>
+        </article>
+      `).join('');
+    }
+
+    function renderTimeline() {
+      const timeline = document.getElementById('timeline');
+      timeline.innerHTML = eventsTimeline.map(item => `
+        <div class="timeline-item">
+          <h4 style="margin:0;font-size:1.15rem;color:var(--primary-dark);">${item.title}</h4>
+          <time style="color:var(--muted);font-size:.9rem;">${item.date}</time>
+          <p style="margin:6px 0 0;color:var(--muted);">${item.details}</p>
+        </div>
+      `).join('');
+    }
+
+    function animateCounters(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.count, 10) || 0;
+          const duration = 1200;
+          const start = performance.now();
+          function update(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const value = Math.floor(progress * target);
+            el.textContent = formatter.format(value);
+            if (progress < 1) {
+              requestAnimationFrame(update);
+            }
+          }
+          requestAnimationFrame(update);
+          observer.unobserve(el);
+        }
+      });
+    }
+
+    const observer = new IntersectionObserver(animateCounters, { threshold: 0.6 });
+
+    document.querySelectorAll('[data-count]').forEach(el => observer.observe(el));
+
+    function toggleMenu() {
+      const nav = document.getElementById('mainNav');
+      nav.classList.toggle('open');
+    }
+
+    renderNews();
+    renderTimeline();
+  </script>
+</body>
+</html>
