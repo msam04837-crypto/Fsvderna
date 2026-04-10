@@ -1,0 +1,18 @@
+<Window x:Class="GovRegistry.Wpf.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="نظام إدارة السائقين والزوار" Height="360" Width="460" WindowStartupLocation="CenterScreen">
+    <Grid Margin="24">
+        <Border Background="{StaticResource CardBrush}" CornerRadius="12" Padding="24">
+            <StackPanel>
+                <TextBlock Text="تسجيل الدخول" FontSize="24" FontWeight="Bold" Margin="0,0,0,18"/>
+                <TextBlock Text="اسم المستخدم"/>
+                <TextBox Text="{Binding Username}"/>
+                <TextBlock Text="كلمة المرور"/>
+                <PasswordBox x:Name="PasswordInput" PasswordChanged="PasswordInput_OnPasswordChanged" Margin="4" Padding="6"/>
+                <Button Content="دخول" Command="{Binding LoginCommand}" Margin="4,14,4,0" />
+                <TextBlock Margin="0,16,0,0" Foreground="#93C5FD" Text="الحساب الافتراضي: admin / Admin@123" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,104 @@
+<Window x:Class="GovRegistry.Wpf.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="نظام إدارة الحركة - جهة رسمية" Height="760" Width="1280" WindowStartupLocation="CenterScreen">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Margin="0,0,0,10">
+            <TextBlock Text="لوحة الإدارة" FontSize="24" FontWeight="Bold" DockPanel.Dock="Right"/>
+            <TextBlock Text="{Binding CurrentUser}" Foreground="#93C5FD" FontSize="14" VerticalAlignment="Bottom"/>
+        </DockPanel>
+
+        <TabControl Grid.Row="1" Background="Transparent">
+            <TabItem Header="الرئيسية">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                    <UniformGrid Columns="2" Margin="0,0,0,12">
+                        <Border Background="{StaticResource CardBrush}" Margin="6" Padding="16" CornerRadius="10">
+                            <StackPanel><TextBlock Text="السائقون خارج الجهة"/><TextBlock Text="{Binding ActiveDrivers}" FontSize="32" FontWeight="Bold"/></StackPanel>
+                        </Border>
+                        <Border Background="{StaticResource CardBrush}" Margin="6" Padding="16" CornerRadius="10">
+                            <StackPanel><TextBlock Text="الزوار داخل الجهة"/><TextBlock Text="{Binding ActiveVisitors}" FontSize="32" FontWeight="Bold"/></StackPanel>
+                        </Border>
+                    </UniformGrid>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Activities}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="الكيان" Binding="{Binding EntityName}"/>
+                            <DataGridTextColumn Header="العملية" Binding="{Binding Action}"/>
+                            <DataGridTextColumn Header="المستخدم" Binding="{Binding PerformedBy}"/>
+                            <DataGridTextColumn Header="الوقت" Binding="{Binding Timestamp}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="السائقون">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                    <WrapPanel>
+                        <TextBox Width="140" Text="{Binding DriverName, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="120" Text="{Binding CarType, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="120" Text="{Binding PlateNumber, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="180" Text="{Binding Destination, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="200" Text="{Binding DriverNotes, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Content="تسجيل خروج" Command="{Binding RegisterDriverExitCommand}"/>
+                        <Button Content="تسجيل عودة المحدد" Command="{Binding RegisterDriverReturnCommand}"/>
+                        <Button Content="تصدير" Command="{Binding ExportDriversCommand}"/>
+                        <Button Content="تحديث" Command="{Binding RefreshCommand}"/>
+                    </WrapPanel>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Drivers}" SelectedItem="{Binding SelectedDriver}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="الاسم" Binding="{Binding DriverName}"/>
+                            <DataGridTextColumn Header="السيارة" Binding="{Binding CarType}"/>
+                            <DataGridTextColumn Header="اللوحة" Binding="{Binding PlateNumber}"/>
+                            <DataGridTextColumn Header="الخروج" Binding="{Binding ExitTime}"/>
+                            <DataGridTextColumn Header="العودة" Binding="{Binding ReturnTime}"/>
+                            <DataGridTextColumn Header="الوجهة" Binding="{Binding Destination}"/>
+                            <DataGridTextColumn Header="الحالة" Binding="{Binding Status}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="الزوار">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                    <WrapPanel>
+                        <TextBox Width="140" Text="{Binding VisitorName, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="140" Text="{Binding IdPassport, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="140" Text="{Binding PersonToVisit, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="180" Text="{Binding VisitPurpose, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="180" Text="{Binding VisitorNotes, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Content="تسجيل دخول" Command="{Binding RegisterVisitorEntryCommand}"/>
+                        <Button Content="تسجيل خروج المحدد" Command="{Binding RegisterVisitorExitCommand}"/>
+                        <Button Content="تصدير" Command="{Binding ExportVisitorsCommand}"/>
+                        <Button Content="تحديث" Command="{Binding RefreshCommand}"/>
+                    </WrapPanel>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Visitors}" SelectedItem="{Binding SelectedVisitor}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="الاسم" Binding="{Binding VisitorName}"/>
+                            <DataGridTextColumn Header="الهوية/الجواز" Binding="{Binding IdPassport}"/>
+                            <DataGridTextColumn Header="زيارة" Binding="{Binding PersonToVisit}"/>
+                            <DataGridTextColumn Header="الدخول" Binding="{Binding EntryTime}"/>
+                            <DataGridTextColumn Header="الخروج" Binding="{Binding ExitTime}"/>
+                            <DataGridTextColumn Header="الغرض" Binding="{Binding VisitPurpose}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="الأمن والنسخ الاحتياطي">
+                <StackPanel Margin="16">
+                    <TextBlock Text="• جميع عمليات الإدخال/التعديل تُسجّل في Audit Log." Margin="0,4"/>
+                    <TextBlock Text="• ملاحظات السائقين والزوار تُخزن بحماية محلية (DPAPI على ويندوز)." Margin="0,4"/>
+                    <TextBlock Text="• يمكن أخذ نسخة احتياطية محلية واستعادتها يدويًا." Margin="0,4"/>
+                    <Button Content="إنشاء نسخة احتياطية" Command="{Binding BackupCommand}" Width="180"/>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

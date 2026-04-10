@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GovRegistry.Core", "src\GovRegistry.Core\GovRegistry.Core.csproj", "{2A5F93B0-31B4-42A3-AEE0-693972E7F86B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GovRegistry.Infrastructure", "src\GovRegistry.Infrastructure\GovRegistry.Infrastructure.csproj", "{634B0DCF-3330-45F2-8B0F-5EA6D57DA7D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GovRegistry.Wpf", "src\GovRegistry.Wpf\GovRegistry.Wpf.csproj", "{20D5A956-3024-4D6C-B9EF-A9D8C1457B84}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A5F93B0-31B4-42A3-AEE0-693972E7F86B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5F93B0-31B4-42A3-AEE0-693972E7F86B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5F93B0-31B4-42A3-AEE0-693972E7F86B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5F93B0-31B4-42A3-AEE0-693972E7F86B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{634B0DCF-3330-45F2-8B0F-5EA6D57DA7D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{634B0DCF-3330-45F2-8B0F-5EA6D57DA7D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{634B0DCF-3330-45F2-8B0F-5EA6D57DA7D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{634B0DCF-3330-45F2-8B0F-5EA6D57DA7D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20D5A956-3024-4D6C-B9EF-A9D8C1457B84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20D5A956-3024-4D6C-B9EF-A9D8C1457B84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20D5A956-3024-4D6C-B9EF-A9D8C1457B84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20D5A956-3024-4D6C-B9EF-A9D8C1457B84}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
