@@ -33,6 +33,12 @@ public sealed class MainViewModel : ViewModelBase
     public string PersonToVisit { get; set; } = string.Empty;
     public string VisitPurpose { get; set; } = string.Empty;
     public string VisitorNotes { get; set; } = string.Empty;
+    public string DriverSearchName { get; set; } = string.Empty;
+    public string DriverSearchPlate { get; set; } = string.Empty;
+    public string VisitorSearchName { get; set; } = string.Empty;
+    public string VisitorSearchIdentity { get; set; } = string.Empty;
+    public DateTime ReportFromDate { get; set; } = DateTime.Today;
+    public DateTime ReportToDate { get; set; } = DateTime.Today;
 
     public RelayCommand RegisterDriverExitCommand { get; }
     public RelayCommand RegisterVisitorEntryCommand { get; }
@@ -42,6 +48,14 @@ public sealed class MainViewModel : ViewModelBase
     public RelayCommand ExportDriversCommand { get; }
     public RelayCommand ExportVisitorsCommand { get; }
     public RelayCommand BackupCommand { get; }
+    public RelayCommand RestoreCommand { get; }
+    public RelayCommand SearchDriversCommand { get; }
+    public RelayCommand SearchVisitorsCommand { get; }
+    public RelayCommand DailyDriversReportCommand { get; }
+    public RelayCommand DriversDateRangeReportCommand { get; }
+    public RelayCommand DailyVisitorsReportCommand { get; }
+    public RelayCommand VisitorsDateRangeReportCommand { get; }
+    public RelayCommand ActiveStatusReportCommand { get; }
 
     public MainViewModel(AppServices services, AppUser user)
     {
@@ -55,6 +69,14 @@ public sealed class MainViewModel : ViewModelBase
         ExportDriversCommand = new RelayCommand(ExportDrivers);
         ExportVisitorsCommand = new RelayCommand(ExportVisitors);
         BackupCommand = new RelayCommand(Backup);
+        RestoreCommand = new RelayCommand(Restore, () => _user.Role is UserRole.Admin or UserRole.Supervisor);
+        SearchDriversCommand = new RelayCommand(SearchDrivers);
+        SearchVisitorsCommand = new RelayCommand(SearchVisitors);
+        DailyDriversReportCommand = new RelayCommand(ExportDailyDrivers);
+        DriversDateRangeReportCommand = new RelayCommand(ExportDriversByRange);
+        DailyVisitorsReportCommand = new RelayCommand(ExportDailyVisitors);
+        VisitorsDateRangeReportCommand = new RelayCommand(ExportVisitorsByRange);
+        ActiveStatusReportCommand = new RelayCommand(ExportActiveStatus);
         Refresh();
     }
 
@@ -90,6 +112,7 @@ public sealed class MainViewModel : ViewModelBase
 
     private void RegisterDriverReturn()
     {
+        if (_user.Role is UserRole.DataEntry or UserRole.Viewer) return;
         if (SelectedDriver is null) return;
         _services.DriverService.RegisterReturn(SelectedDriver.Id, DateTime.Now, _user.Username);
         Refresh();
@@ -97,6 +120,7 @@ public sealed class MainViewModel : ViewModelBase
 
     private void RegisterVisitorExit()
     {
+        if (_user.Role is UserRole.DataEntry or UserRole.Viewer) return;
         if (SelectedVisitor is null) return;
         _services.VisitorService.RegisterExit(SelectedVisitor.Id, DateTime.Now, _user.Username);
         Refresh();
@@ -120,5 +144,57 @@ public sealed class MainViewModel : ViewModelBase
     {
         string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "GovRegistryBackups");
         _services.BackupService.Backup(dir);
+    }
+
+    private void Restore()
+    {
+        var ofd = new OpenFileDialog { Filter = "SQLite DB|*.db" };
+        if (ofd.ShowDialog() == true)
+        {
+            _services.BackupService.Restore(ofd.FileName);
+            Refresh();
+        }
+    }
+
+    private void SearchDrivers()
+    {
+        Drivers.Clear();
+        foreach (var d in _services.DriverService.Search(DriverSearchName, DriverSearchPlate, ReportFromDate.Date, ReportToDate.Date.AddDays(1).AddTicks(-1)))
+            Drivers.Add(d);
+    }
+
+    private void SearchVisitors()
+    {
+        Visitors.Clear();
+        foreach (var v in _services.VisitorService.Search(VisitorSearchName, VisitorSearchIdentity, ReportFromDate.Date, ReportToDate.Date.AddDays(1).AddTicks(-1)))
+            Visitors.Add(v);
+    }
+
+    private void ExportDailyDrivers() => ExportDriversSet(_services.DriverService.Search(null, null, DateTime.Today, DateTime.Today.AddDays(1).AddTicks(-1)), "drivers_daily.csv");
+    private void ExportDriversByRange() => ExportDriversSet(_services.DriverService.Search(null, null, ReportFromDate.Date, ReportToDate.Date.AddDays(1).AddTicks(-1)), "drivers_range.csv");
+    private void ExportDailyVisitors() => ExportVisitorsSet(_services.VisitorService.Search(null, null, DateTime.Today, DateTime.Today.AddDays(1).AddTicks(-1)), "visitors_daily.csv");
+    private void ExportVisitorsByRange() => ExportVisitorsSet(_services.VisitorService.Search(null, null, ReportFromDate.Date, ReportToDate.Date.AddDays(1).AddTicks(-1)), "visitors_range.csv");
+
+    private void ExportActiveStatus()
+    {
+        var activeDrivers = _services.DriverService.GetActive();
+        var activeVisitors = _services.VisitorService.GetInsideNow();
+        string folder = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        _services.ReportingService.ExportDriversCsv(activeDrivers, Path.Combine(folder, "active_drivers.csv"));
+        _services.ReportingService.ExportVisitorsCsv(activeVisitors, Path.Combine(folder, "active_visitors.csv"));
+    }
+
+    private void ExportDriversSet(IEnumerable<DriverRecord> records, string defaultName)
+    {
+        var sfd = new SaveFileDialog { Filter = "CSV|*.csv", FileName = defaultName };
+        if (sfd.ShowDialog() == true)
+            _services.ReportingService.ExportDriversCsv(records, sfd.FileName);
+    }
+
+    private void ExportVisitorsSet(IEnumerable<VisitorRecord> records, string defaultName)
+    {
+        var sfd = new SaveFileDialog { Filter = "CSV|*.csv", FileName = defaultName };
+        if (sfd.ShowDialog() == true)
+            _services.ReportingService.ExportVisitorsCsv(records, sfd.FileName);
     }
 }

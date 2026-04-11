@@ -50,7 +50,14 @@
                         <Button Content="تصدير" Command="{Binding ExportDriversCommand}"/>
                         <Button Content="تحديث" Command="{Binding RefreshCommand}"/>
                     </WrapPanel>
-                    <DataGrid Grid.Row="1" ItemsSource="{Binding Drivers}" SelectedItem="{Binding SelectedDriver}">
+                    <WrapPanel Grid.Row="0" Margin="0,44,0,0">
+                        <TextBox Width="160" Text="{Binding DriverSearchName, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="160" Text="{Binding DriverSearchPlate, UpdateSourceTrigger=PropertyChanged}" />
+                        <DatePicker SelectedDate="{Binding ReportFromDate}" Margin="4"/>
+                        <DatePicker SelectedDate="{Binding ReportToDate}" Margin="4"/>
+                        <Button Content="بحث السائقين" Command="{Binding SearchDriversCommand}"/>
+                    </WrapPanel>
+                    <DataGrid Grid.Row="1" Margin="0,36,0,0" ItemsSource="{Binding Drivers}" SelectedItem="{Binding SelectedDriver}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="الاسم" Binding="{Binding DriverName}"/>
                             <DataGridTextColumn Header="السيارة" Binding="{Binding CarType}"/>
@@ -78,7 +85,14 @@
                         <Button Content="تصدير" Command="{Binding ExportVisitorsCommand}"/>
                         <Button Content="تحديث" Command="{Binding RefreshCommand}"/>
                     </WrapPanel>
-                    <DataGrid Grid.Row="1" ItemsSource="{Binding Visitors}" SelectedItem="{Binding SelectedVisitor}">
+                    <WrapPanel Grid.Row="0" Margin="0,44,0,0">
+                        <TextBox Width="160" Text="{Binding VisitorSearchName, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="160" Text="{Binding VisitorSearchIdentity, UpdateSourceTrigger=PropertyChanged}" />
+                        <DatePicker SelectedDate="{Binding ReportFromDate}" Margin="4"/>
+                        <DatePicker SelectedDate="{Binding ReportToDate}" Margin="4"/>
+                        <Button Content="بحث الزوار" Command="{Binding SearchVisitorsCommand}"/>
+                    </WrapPanel>
+                    <DataGrid Grid.Row="1" Margin="0,36,0,0" ItemsSource="{Binding Visitors}" SelectedItem="{Binding SelectedVisitor}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="الاسم" Binding="{Binding VisitorName}"/>
                             <DataGridTextColumn Header="الهوية/الجواز" Binding="{Binding IdPassport}"/>
@@ -97,6 +111,24 @@
                     <TextBlock Text="• ملاحظات السائقين والزوار تُخزن بحماية محلية (DPAPI على ويندوز)." Margin="0,4"/>
                     <TextBlock Text="• يمكن أخذ نسخة احتياطية محلية واستعادتها يدويًا." Margin="0,4"/>
                     <Button Content="إنشاء نسخة احتياطية" Command="{Binding BackupCommand}" Width="180"/>
+                    <Button Content="استعادة من نسخة احتياطية" Command="{Binding RestoreCommand}" Width="180"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="التقارير">
+                <StackPanel Margin="16">
+                    <TextBlock Text="تقارير السائقين والزوار" FontSize="22" FontWeight="Bold" Margin="0,0,0,12"/>
+                    <WrapPanel>
+                        <DatePicker SelectedDate="{Binding ReportFromDate}" Margin="4"/>
+                        <DatePicker SelectedDate="{Binding ReportToDate}" Margin="4"/>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Button Content="تقرير سائقين يومي" Command="{Binding DailyDriversReportCommand}"/>
+                        <Button Content="تقرير سائقين بفترة" Command="{Binding DriversDateRangeReportCommand}"/>
+                        <Button Content="تقرير زوار يومي" Command="{Binding DailyVisitorsReportCommand}"/>
+                        <Button Content="تقرير زوار بفترة" Command="{Binding VisitorsDateRangeReportCommand}"/>
+                        <Button Content="تقرير الحالة الحالية" Command="{Binding ActiveStatusReportCommand}"/>
+                    </WrapPanel>
+                    <TextBlock Text="يمكن فتح ملفات CSV مباشرة في Excel." Margin="4"/>
                 </StackPanel>
             </TabItem>
         </TabControl>
